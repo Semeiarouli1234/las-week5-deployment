@@ -1,0 +1,3 @@
+models/indobert_sentiment/model.safetensors
+__pycache__/
+*.pyc
