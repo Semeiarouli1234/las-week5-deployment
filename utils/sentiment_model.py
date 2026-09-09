@@ -8,7 +8,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 # Path expected: models/indobert_sentiment/ (folder hasil trainer.save_model()
 # + tokenizer.save_pretrained(), berisi config.json, model.safetensors, dst.)
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models", "indobert_sentiment")
+MODEL_DIR = "Semeia/indobert-sentimen-mbg"
 
 MAX_LEN = 128
 
@@ -46,12 +46,14 @@ def clean_text(text):
 
 @st.cache_resource
 def load_sentiment_model():
-    if not os.path.isdir(MODEL_DIR):
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
+        model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+        model.eval()
+        return model, tokenizer
+    except Exception as e:
+        st.error(f"Gagal load model dari HuggingFace Hub: {e}")
         return None, None
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
-    model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
-    model.eval()
-    return model, tokenizer
 
 
 def predict_sentiment(model, tokenizer, text):
