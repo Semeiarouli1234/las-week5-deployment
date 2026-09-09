@@ -109,7 +109,17 @@ with tab_versioning:
         }
     )
 
-    st.info(
-        "Screenshot/dokumentasi tiap versi sebelumnya bisa ditambahkan di sini "
-        "sebagai gambar (st.image) sesuai kriteria penilaian tugas."
-    )
+st.markdown("**Dokumentasi bukti evaluasi (screenshot dari notebook Kaggle)**")
+
+st.image(
+    "assets/tomato_comparison_table.png",
+    caption="Tabel perbandingan 3 versi model Tomato Leaf (Custom CNN, MobileNetV2 Frozen, MobileNetV2 Fine-Tuned)",
+)
+st.image(
+    "assets/tomato_comparison_chart.png",
+    caption="Grafik perbandingan accuracy & F1 score model Tomato Leaf",
+)
+st.image(
+    "assets/sentiment_comparison_table.png",
+    caption="Tabel perbandingan 3 versi model Sentimen MBG (TF-IDF+LogReg, TF-IDF+SVM, IndoBERT)",
+)
