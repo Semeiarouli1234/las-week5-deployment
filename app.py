@@ -71,55 +71,73 @@ with tab_sentiment:
 
 with tab_versioning:
     st.subheader("Riwayat Versi Model")
-
-    st.markdown("**Model 1: Klasifikasi Daun Tomat**")
-    st.table(
-        {
-            "Versi": ["v1", "v2", "v-final"],
-            "Model": [
-                "MobileNetV2 (Frozen)",
-                "MobileNetV2 (Fine-Tuned)",
-                "Custom CNN",
-            ],
-            "Accuracy": ["86.8%", "93.8%", "94.8%"],
-            "F1 (macro)": [0.868, 0.938, 0.948],
-            "Catatan": [
-                "Transfer learning, base frozen",
-                "Fine-tuning 50 layer teratas, naik dari v1",
-                "CNN custom 4 blok konvolusi, hasil terbaik",
-            ],
-        }
+    st.caption(
+        "Pencatatan progres tiap model dari versi awal sampai versi final yang di-deploy."
     )
 
-    st.markdown("**Model 2: Analisis Sentimen MBG**")
-    st.table(
-        {
-            "Versi": ["v1", "v2", "v-final"],
-            "Model": [
-                "TF-IDF + Logistic Regression",
-                "TF-IDF + Linear SVM",
-                "IndoBERT Fine-tuned",
-            ],
-            "F1 (macro)": [0.740, 0.787, 0.895],
-            "Catatan": [
-                "Baseline linear model dengan class_weight balanced",
-                "Peningkatan dari kernel linear SVM",
-                "Fine-tuning indobenchmark/indobert-base-p1, hasil terbaik",
-            ],
-        }
+    # ---------- Model 1: Tomato Leaf ----------
+    st.markdown("### 🍅 Klasifikasi Daun Tomat")
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("v1 — MobileNetV2 (Frozen)", "86.8%", help="F1 macro: 0.868")
+    col2.metric(
+        "v2 — MobileNetV2 (Fine-Tuned)", "93.8%", "+7.0%", help="F1 macro: 0.938"
+    )
+    col3.metric(
+        "v-final — Custom CNN", "94.8%", "+1.0%", help="F1 macro: 0.948 (terbaik)"
     )
 
-    st.markdown("**Dokumentasi bukti evaluasi (screenshot dari notebook Kaggle)**")
+    with st.expander("Detail riwayat versi Tomato Leaf"):
+        st.markdown(
+            """
+- **v1 — MobileNetV2 (Frozen):** transfer learning dengan base model dibekukan,
+  jadi fitur bawaan ImageNet dipakai langsung tanpa disesuaikan ke gambar daun tomat.
+- **v2 — MobileNetV2 (Fine-Tuned):** 50 layer teratas base model dibuka dan
+  dilatih ulang, akurasi naik cukup signifikan dari v1.
+- **v-final — Custom CNN:** arsitektur CNN dirancang sendiri (4 blok konvolusi),
+  hasilnya melampaui MobileNetV2 dan dipilih sebagai model yang di-deploy.
+            """
+        )
 
-    st.image(
-        "assets/tomato_comparison_table.png",
-        caption="Tabel perbandingan 3 versi model Tomato Leaf (Custom CNN, MobileNetV2 Frozen, MobileNetV2 Fine-Tuned)",
+    img1, img2 = st.columns(2)
+    with img1:
+        st.image(
+            "assets/tomato_comparison_table.png",
+            caption="Tabel perbandingan ketiga versi",
+        )
+    with img2:
+        st.image(
+            "assets/tomato_comparison_chart.png",
+            caption="Grafik accuracy & F1 score",
+        )
+
+    st.divider()
+
+    # ---------- Model 2: Sentimen MBG ----------
+    st.markdown("### 💬 Analisis Sentimen MBG")
+
+    col4, col5, col6 = st.columns(3)
+    col4.metric("v1 — TF-IDF + LogReg", "74.0%", help="F1 macro: 0.740")
+    col5.metric("v2 — TF-IDF + SVM", "78.7%", "+4.7%", help="F1 macro: 0.787")
+    col6.metric(
+        "v-final — IndoBERT", "89.5%", "+10.8%", help="F1 macro: 0.895 (terbaik)"
     )
-    st.image(
-        "assets/tomato_comparison_chart.png",
-        caption="Grafik perbandingan accuracy & F1 score model Tomato Leaf",
-    )
+
+    with st.expander("Detail riwayat versi Sentimen MBG"):
+        st.markdown(
+            """
+- **v1 — TF-IDF + Logistic Regression:** model linear baseline dengan
+  `class_weight="balanced"` untuk menangani ketidakseimbangan kelas.
+- **v2 — TF-IDF + Linear SVM:** ganti algoritma ke SVM kernel linear,
+  performa naik dari baseline.
+- **v-final — IndoBERT Fine-tuned:** fine-tuning model bahasa
+  `indobenchmark/indobert-base-p1`, hasil jauh melampaui model linear
+  dan dipilih sebagai model yang di-deploy.
+            """
+        )
+
     st.image(
         "assets/sentiment_comparison_table.png",
-        caption="Tabel perbandingan 3 versi model Sentimen MBG (TF-IDF+LogReg, TF-IDF+SVM, IndoBERT)",
+        caption="Tabel perbandingan ketiga versi model sentimen",
+        width=500,
     )
