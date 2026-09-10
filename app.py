@@ -12,6 +12,54 @@ def prettify_tomato_label(label: str) -> str:
     return name.title()
 
 
+DISEASE_INFO = {
+    "Tomato___Bacterial_spot": (
+        "Disebabkan bakteri *Xanthomonas*, muncul bercak kecil kehitaman "
+        "dengan lingkaran kuning di sekitarnya. Menyebar cepat saat "
+        "cuaca lembap dan hujan."
+    ),
+    "Tomato___Early_blight": (
+        "Disebabkan jamur *Alternaria solani*, ciri khasnya bercak coklat "
+        "dengan pola cincin konsentris (seperti target panah) pada daun tua."
+    ),
+    "Tomato___Late_blight": (
+        "Disebabkan jamur *Phytophthora infestans*, bercak coklat kehitaman "
+        "tidak beraturan yang meluas cepat dan bisa membusukkan seluruh tanaman."
+    ),
+    "Tomato___Leaf_Mold": (
+        "Disebabkan jamur *Passalora fulva*, muncul bercak kuning di "
+        "permukaan atas daun dan lapisan jamur keabu-abuan di bawahnya. "
+        "Sering muncul di lingkungan lembap dengan sirkulasi udara buruk."
+    ),
+    "Tomato___Septoria_leaf_spot": (
+        "Disebabkan jamur *Septoria lycopersici*, bercak kecil bulat "
+        "berwarna coklat dengan titik hitam di tengahnya, biasanya "
+        "dimulai dari daun bagian bawah."
+    ),
+    "Tomato___Spider_mites Two-spotted_spider_mite": (
+        "Disebabkan hama tungau laba-laba, gejalanya bintik kuning kecil "
+        "menyebar dan jaring halus di permukaan daun, sering muncul saat "
+        "cuaca panas dan kering."
+    ),
+    "Tomato___Target_Spot": (
+        "Disebabkan jamur *Corynespora cassiicola*, bercak coklat dengan "
+        "pola cincin mirip Early Blight namun lebih gelap dan cekung di tengah."
+    ),
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": (
+        "Disebabkan virus yang ditularkan kutu kebul (whitefly), daun "
+        "menguning, mengeriting ke atas, dan pertumbuhan tanaman terhambat."
+    ),
+    "Tomato___Tomato_mosaic_virus": (
+        "Virus yang menyebabkan pola belang hijau tua-muda seperti mosaik "
+        "pada daun, disertai daun mengeriput dan pertumbuhan tidak normal."
+    ),
+    "Tomato___healthy": (
+        "Tidak ditemukan tanda-tanda penyakit. Daun terlihat hijau merata "
+        "tanpa bercak, perubahan warna, atau kelainan bentuk."
+    ),
+}
+
+
 st.title("Deployment Model LAS Big Data")
 st.caption("Custom CNN (Tomato Leaf Disease) + IndoBERT (Sentimen MBG)")
 
@@ -64,6 +112,10 @@ with tab_tomato:
                 else:
                     st.warning(f"### 🩺 {display_label}")
                 st.caption(f"Tingkat keyakinan model: **{confidence:.1%}**")
+
+                explanation = DISEASE_INFO.get(label)
+                if explanation:
+                    st.markdown(f"**Penjelasan:** {explanation}")
 
                 st.markdown("**Top 3 kemungkinan:**")
                 top3 = sorted(all_probs.items(), key=lambda x: x[1], reverse=True)[:3]
